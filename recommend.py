@@ -15,17 +15,16 @@ def main():
   maptime = time.clock()
   objects_visitors = map_visitors_to_objects(visitors, objects)
   print 'create index: ', (time.clock() - maptime) * 1000, 'ms'
-  
+
   findtime = time.clock()
+  for i in range(0, 1000):
+    find_recommendations(visitors, objects_visitors, objects)
+  print 'time to find 1000 recommendations:', (time.clock() - findtime) * 1000, 'ms'
+  
+def find_recommendations(visitors,objects_visitors, objects):
   similar = find_similar(create_single_visitor(objects), objects_visitors)
-  print 'find similar users: ', (time.clock() - findtime) * 1000, 'ms'
-
-  objectpooltime = time.clock()
   object_pool = create_object_pool(similar, visitors)
-  print 'create object recommendation pool: ', (time.clock() - objectpooltime) * 1000, 'ms'
-
-  print 'top 5 recommendations:', sorted(object_pool.items(), key = lambda x: x[1], reverse = True)[:5]
-
+  return sorted(object_pool.items(), key = lambda x: x[1], reverse = True)[:5]
 
 def create_object_pool(similar, visitors):
   object_pool = {}
